@@ -28,6 +28,6 @@ export const FilterBySearch = createAction(
 );
 
 export const FilterByTag = createAction(
-  '[Action] Filter By Search',
+  '[Action] Filter By Tag',
   props<{ tag: Tag }>()
 );
