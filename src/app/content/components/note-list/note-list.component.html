@@ -1,0 +1,28 @@
+<div class="note-list-container">
+  <div class="search-input-area">
+    <input type="text" class="search-input" (input)="searchNote($event)">
+    <button class="add-button" (click)="addNote()">+</button>
+  </div>
+
+  <div class="note-list">
+    <div *ngFor="let note of notesList | sortBy: 'updatedAt'" class="note-list__card">
+      <div class="card-info" (click)="selectNote(note.id)">
+        <div class="card-title">
+          {{ note.title }}
+        </div>
+        <div class="card-date">
+          {{ note.updatedAt | date: 'dd.MM.yyyy' }}
+        </div>
+      </div>
+      <div class="remove-btn-area">
+        <div class="remove-btn" (click)="removeNote(note.id)">X</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tags-list">
+    <div *ngFor="let tag of tags" class="tag active-tag" [ngClass]="{'active-tag': tag.active}" (click)="filterNotesByTag(tag)">
+      {{ tag.text }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="note-card-container">
+  <div class="card-title">
+    <input class="card-title__input" name="title" type="text" [value]="selectedNote?.title" (blur)="updateNote($event)">
+  </div>
+  <div class="card-description">
+    <textarea *ngIf="showDescriptionInput" class="description-input" name="description" [value]="selectedNote?.description" cols="100" rows="10" (blur)="updateNote($event)"></textarea>
+    <div [hidden]="showDescriptionInput" (click)="toggleDescription()" id="description-text" class="card-description__text"></div>
+  </div>
+</div>

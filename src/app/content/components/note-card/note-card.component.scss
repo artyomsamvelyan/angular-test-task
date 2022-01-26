@@ -1,0 +1,40 @@
+.note-card-container {
+  height: 100%;
+
+  .card-title {
+    padding: 25px;
+    border-bottom: 3px solid #908f8f;
+
+    .card-title__input {
+      border: none;
+      background: #cbc7c7;
+      font-size: 25px;
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  .card-description {
+    height: 60%;
+    padding: 25px;
+    font-size: 19px;
+
+    .description-input {
+      border: none;
+      background: #cbc7c7;
+      font-size: 19px;
+      outline: none;
+    }
+
+    .card-description__text {
+      height: 100%;
+    }
+
+    .tag-text {
+      color: white;
+      background: #2067ef;
+      padding: 3px 8px;
+      border-radius: 8px;
+    }
+  }
+}
