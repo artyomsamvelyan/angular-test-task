@@ -38,6 +38,7 @@ export const reducer = createReducer(
         ...state,
         noteList: [...state.noteList, {...action.note, id: state.lastId + 1}],
         filteredNoteList: [...state.noteList, {...action.note, id: state.lastId + 1}],
+        selectedNote: {...action.note, id: state.lastId + 1},
         lastId: state.lastId + 1
       })
     }
@@ -118,6 +119,7 @@ export const reducer = createReducer(
       return adapter.setAll([], {
         ...state,
         filteredNoteList: [...newNoteList],
+        selectedNote: new Note()
       })
     }
   ),
@@ -137,7 +139,8 @@ export const reducer = createReducer(
       return adapter.setAll([], {
         ...state,
         filteredNoteList: [...newNoteList],
-        tags: [...newTags]
+        tags: [...newTags],
+        selectedNote: new Note()
       })
     }
   ),
