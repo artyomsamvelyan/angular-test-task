@@ -36,7 +36,10 @@ export class NoteCardComponent implements OnInit {
     let value = event.target.value || event.target.innerHTML
     let formatedDescription = this.selectedNote.formatedDescription
     if(key === 'description') {
-      formatedDescription = value.replaceAll(/(#[A-z0-9]+)/g, `<span style="color: white;background: #2067ef;padding: 3px 8px;border-radius: 8px;">$1</span>`)
+      formatedDescription = value.replaceAll(
+        /(#[A-z0-9]+)/g,
+        `<span style="color: white;padding: 3px 8px;border-radius: 8px;background: #2067ef">$1</span>`
+      )
       this.showDescriptionInput = false
     }
     const updatedNote: NoteInterface = {

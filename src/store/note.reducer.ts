@@ -1,5 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
+import { ActionReducer, INIT, UPDATE } from "@ngrx/store";
+import Storage from 'src/core/helpers/localstorage';
 import { Note, NoteInterface } from 'src/models/note.model';
 import * as NoteActions from './note.actions';
 
@@ -20,6 +22,7 @@ export interface NoteState extends EntityState<NoteInterface> {
 }
 
 export const adapter: EntityAdapter<NoteInterface> = createEntityAdapter<NoteInterface>();
+const storage = new Storage(notesFeatureKey)
 
 export const initialState: NoteState = adapter.getInitialState({
   noteList: [],
@@ -32,11 +35,28 @@ export const initialState: NoteState = adapter.getInitialState({
 
 export const reducer = createReducer(
   initialState,
-  on(NoteActions.AddNote,
-    (state, action) => {
+  on(NoteActions.InitState,
+    (state) => {
+      const noteList = storage.getNoteList();
+      const tags = storage.getTags();
+      const lastId = noteList[noteList.length - 1]?.id || 0;
+
       return adapter.setAll([], {
         ...state,
-        noteList: [...state.noteList, {...action.note, id: state.lastId + 1}],
+        noteList: [...noteList],
+        filteredNoteList: [...noteList],
+        lastId,
+        tags: [...tags],
+      })
+    }
+  ),
+  on(NoteActions.AddNote,
+    (state, action) => {
+      const newNoteList = [...state.noteList, {...action.note, id: state.lastId + 1}];
+      storage.saveData(newNoteList);
+      return adapter.setAll([], {
+        ...state,
+        noteList: newNoteList,
         filteredNoteList: [...state.noteList, {...action.note, id: state.lastId + 1}],
         selectedNote: {...action.note, id: state.lastId + 1},
         lastId: state.lastId + 1
@@ -65,6 +85,7 @@ export const reducer = createReducer(
           })
       })
 
+      storage.saveData(newNoteList, newTags);
       return adapter.setAll([], {
         ...state,
         noteList: newNoteList,
@@ -75,9 +96,17 @@ export const reducer = createReducer(
   ),
   on(NoteActions.SelectNote,
     (state, action) => {
-      const selectedNote = state.noteList.find(
+      let selectedNote = state.noteList.find(
         note => note.id === action.id
       )
+      const regex = new RegExp(`2067ef(\">${state.selectedTag?.text})`, 'g');
+      if(selectedNote) {
+        selectedNote = {
+          ...selectedNote,
+          formatedDescription: selectedNote.formatedDescription.replace(regex, '008000$1')
+        }
+      }
+
       return adapter.setAll([], {
         ...state,
         selectedNote
@@ -102,6 +131,7 @@ export const reducer = createReducer(
         }
       })
 
+      storage.saveData(newNoteList, newTags);
       return adapter.setAll([], {
         ...state,
         noteList: [...newNoteList],
@@ -113,8 +143,9 @@ export const reducer = createReducer(
   ),
   on(NoteActions.FilterBySearch,
     (state, action) => {
+      const tagText = state.selectedTag ? state.selectedTag.text : '';
       const newNoteList = state.noteList.filter(item =>
-        item.title.includes(action.text)
+        item.title.includes(action.text) && item.description.includes(tagText)
       )
       return adapter.setAll([], {
         ...state,
@@ -140,7 +171,8 @@ export const reducer = createReducer(
         ...state,
         filteredNoteList: [...newNoteList],
         tags: [...newTags],
-        selectedNote: new Note()
+        selectedNote: new Note(),
+        selectedTag: action.tag
       })
     }
   ),

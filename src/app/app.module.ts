@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromStore from '../store/note.reducer';
 import { StoreModule } from '@ngrx/store';
 import { SortPipe } from 'src/pipes/sort.pipe';
+import { NoteEffects } from 'src/store/note.effects';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SortPipe } from 'src/pipes/sort.pipe';
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({'notes': fromStore.reducer}),
+    EffectsModule.forRoot([NoteEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]

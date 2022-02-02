@@ -2,6 +2,11 @@ import { createAction, props } from '@ngrx/store';
 import { NoteInterface } from 'src/models/note.model';
 import { Tag } from './note.reducer';
 
+export const InitState = createAction(
+  '[Action] Init State',
+  props<{ note: NoteInterface[] }>()
+);
+
 export const AddNote = createAction(
   '[Action] Add Note',
   props<{ note: NoteInterface }>()

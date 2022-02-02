@@ -21,6 +21,7 @@ export class NoteListComponent implements OnInit {
   ngOnInit(): void {
     this.$store.select(fromSelector.getNoteList).subscribe(
       (noteList) => {
+
         return this.notesList = [...noteList]
       }
     );
